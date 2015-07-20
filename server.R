@@ -4,8 +4,9 @@ shinyServer(function(input, output, session) {
   d = NULL
   pc = NULL
   output$results = renderText({
-    if (input$computeButton == 0)
-      return(NULL)
+    input$computeButton
+    #    if (input$computeButton == 0)
+#      return(NULL)
     data = isolate(input$data)
     if (nchar(data) < 5) return(NULL)
     d <<- na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))

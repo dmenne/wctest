@@ -19,7 +19,6 @@ shinyServer(function(input, output, session) {
     td = table(d[,1])
     t1 = which(as.vector(td) == 1)
     if (length(t1) > 0 ) {
-      print(t1)
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
     p = pairwiseCI(form, d, method = "Param.diff")
@@ -30,7 +29,7 @@ shinyServer(function(input, output, session) {
   output$summary = renderText({
     if (is.null(pc())) return(NULL)
     show("summary")
-    attr(pc(),"nrow")
+    attr(pc(),"summary")
    }
   )
   observe({

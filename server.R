@@ -22,7 +22,8 @@ shinyServer(function(input, output, session) {
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
     p = pairwiseCI(form, d, method = "Param.diff")
-    attr(p, "summary") = paste(nrow(d), " gültige Werte")
+    attr(p, "summary") = paste(nrow(d), " gültige Werte in", length(td)," Gruppen",
+                               paste(names(td), collapse = ", "))
     p
   })
 

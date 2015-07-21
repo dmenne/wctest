@@ -1,5 +1,7 @@
 library(pairwiseCI)
 library(DT)
+library(stringr)
+
 shinyServer(function(input, output, session) {
   hide("results")
 
@@ -8,19 +10,27 @@ shinyServer(function(input, output, session) {
       return(NULL)
     data = isolate(input$data)
     if (nchar(data) < 5) return(NULL)
+    # Replace multiple spaces or tabs by single tab
+    data = str_replace_all(data,"([\t ]+)","\t")
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
     d[,1] = as.factor(d[,1])
 
     form = as.formula(paste0(names(d)[2],"~",names(d)[1]))
+    td = table(d[,1])
+    t1 = which(as.vector(td) == 1)
+    if (length(t1) > 0 ) {
+      print(t1)
+      stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
+    }
     p = pairwiseCI(form, d, method = "Param.diff")
-    attr(p, "nrow") = nrow(d)
+    attr(p, "summary") = paste(nrow(d), " gültige Werte")
     p
   })
 
   output$summary = renderText({
     if (is.null(pc())) return(NULL)
     show("summary")
-    paste(attr(pc(),"nrow"), "valid values")
+    attr(pc(),"nrow")
    }
   )
   observe({

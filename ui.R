@@ -17,7 +17,7 @@ shinyUI(fluidPage(
         tags$script(type = "text/javascript",
           HTML("ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});")),
         plotOutput("diffplot"),
-        HTML("<ul><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde kein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li></ul>"),
+        HTML("<ul><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde kein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.</ul>"),
         DT::dataTableOutput('table')
       )
 

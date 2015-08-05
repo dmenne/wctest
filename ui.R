@@ -3,7 +3,7 @@ library(shinyjs)
 
 shinyUI(fluidPage(
   useShinyjs(),
-  titlePanel("Ungepaarter Wilcoxon-Test (Mann-Whitney U-Test) nach Gruppen"),
+  titlePanel("Boxplot und ungepaarter Wilcoxon-Test (Mann-Whitney U-Test) nach Gruppen"),
   sidebarLayout(
     sidebarPanel( "",
       actionButton("computeButton","Berechnen"),
@@ -11,16 +11,17 @@ shinyUI(fluidPage(
       textOutput("summary"),
       imageOutput("helpImage")
     ),
-    mainPanel("Daten: Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben",
+    mainPanel("Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben und 'Berechnen' klicken.",
       aceEditor("data", "", mode = "plain_text"),
       wellPanel(id = "results",
         tags$script(type = "text/javascript",
           HTML("ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});")),
         plotOutput("diffplot"),
-        HTML("<ul><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde kein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.</ul>"),
-        DT::dataTableOutput('table')
-      )
-
+        HTML("<ul><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde kein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.<li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>"),
+        DT::dataTableOutput('table'),
+        plotOutput("boxplot"),
+        HTML("<ul><li>Im Box-Whiskers-Plot werden Mediane, Quartile und Ausreißer (outliers) dargestellt. Siehe den Artikel in <a href='https://de.wikipedia.org/wiki/Boxplot'>Wikipedia</a>.</li><li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>")
+      ) # wellPanel
     )
   )
 ))

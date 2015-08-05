@@ -1,20 +1,26 @@
 library(pairwiseCI)
 library(DT)
 library(stringr)
+library(ggplot2)
 
 shinyServer(function(input, output, session) {
   hide("results")
+  theme_set(theme_bw())
 
-  pc = reactive({
-    if (input$computeButton == 0)
-      return(NULL)
+  getData = reactive({
     data = isolate(input$data)
     if (nchar(data) < 5) return(NULL)
     # Replace multiple spaces or tabs by single tab
     data = str_replace_all(data,"([\t ]+)","\t")
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
     d[,1] = as.factor(d[,1])
+    d
+  })
 
+  pc = reactive({
+    if (input$computeButton == 0)
+      return(NULL)
+    d = getData();
     form = as.formula(paste0(names(d)[2],"~",names(d)[1]))
     td = table(d[,1])
     t1 = which(as.vector(td) == 1)
@@ -54,10 +60,17 @@ shinyServer(function(input, output, session) {
     plotCI(p, main = "95% Konfidenzintervalle", HL = TRUE, lines = 0, ylim = ylim)
   })
 
+  output$boxplot = renderPlot({
+    if (input$computeButton == 0)
+      return(NULL)
+    d = getData()
+    ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) + geom_boxplot()
+  })
+
 
   output$table = DT::renderDataTable({
     if (is.null(pc())) return(NULL)
     as.data.frame(pc())},
-      options = list(autoWidth = TRUE, dom = 't'))
+      options = list(dom = 't'))
 })
 

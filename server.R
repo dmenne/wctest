@@ -8,19 +8,19 @@ shinyServer(function(input, output, session) {
   theme_set(theme_bw())
 
   getData = reactive({
-    data = isolate(input$data)
-    if (nchar(data) < 5) return(NULL)
+    data = input$data
     # Replace multiple spaces or tabs by single tab
     data = str_replace_all(data,"([\t ]+)","\t")
+    if (nchar(data) < 10) return (NULL)
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
+    if (nrow(d) < 3) return(NULL)
     d[,1] = as.factor(d[,1])
     d
   })
 
   pc = reactive({
-    if (input$computeButton == 0)
-      return(NULL)
     d = getData();
+    if (is.null(d)) return(NULL)
     form = as.formula(paste0(names(d)[2],"~",names(d)[1]))
     td = table(d[,1])
     t1 = which(as.vector(td) == 1)
@@ -28,7 +28,7 @@ shinyServer(function(input, output, session) {
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
     p = pairwiseCI(form, d, method = "Param.diff")
-    attr(p, "summary") = paste(nrow(d), " gültige Werte in", length(td)," Gruppen",
+    attr(p, "summary") = paste(nrow(d), " gültige Werte in ", length(td)," Gruppen",
                                paste(names(td), collapse = ", "))
     p
   })
@@ -37,7 +37,7 @@ shinyServer(function(input, output, session) {
     if (is.null(pc())) return(NULL)
     show("summary")
     attr(pc(),"summary")
-   }
+  }
   )
   observe({
     if (input$clearButton == 0)
@@ -61,9 +61,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$boxplot = renderPlot({
-    if (input$computeButton == 0)
-      return(NULL)
     d = getData()
+    if (is.null(d)) return(NULL)
     ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) + geom_boxplot()
   })
 

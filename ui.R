@@ -3,16 +3,17 @@ library(shinyjs)
 
 shinyUI(fluidPage(
   useShinyjs(),
+  tags$style(HTML("ul{margin-left:-30px}")),
   titlePanel("Boxplot und ungepaarter Wilcoxon-Test (Mann-Whitney U-Test) nach Gruppen"),
   sidebarLayout(
     sidebarPanel( "",
-      actionButton("computeButton","Berechnen"),
-      actionButton("clearButton","Löschen"),
       textOutput("summary"),
-      imageOutput("helpImage")
+      imageOutput("helpImage", height = "430px"),
+      HTML("<ul><li>Kopieren Sie die Spalten wie oben in eine extra Seite von Excel.</li><li>In der ersten Spalte steht der Gruppenname, am besten als Textkürzel; in der zweiten die gemessenen Werten.</li><li>Spaltenüberschriften müssen vorhanden sein.</li><li>Nehmen Sie die Daten mit Spaltenüberschriften in die Zwischenablage (STRG-C)</li><li>Pasten Sie die Daten in das Feld oben rechts.</li></ul>")
     ),
-    mainPanel("Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben und 'Berechnen' klicken.",
+    mainPanel("Daten: Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben",
       aceEditor("data", "", mode = "plain_text"),
+      actionButton("clearButton","Löschen"),
       wellPanel(id = "results",
         tags$script(type = "text/javascript",
           HTML("ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});")),

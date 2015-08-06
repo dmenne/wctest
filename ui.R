@@ -9,16 +9,16 @@ shinyUI(fluidPage(
     sidebarPanel( "",
       textOutput("summary"),
       imageOutput("helpImage", height = "430px"),
-      HTML("<ul><li>Kopieren Sie die Spalten wie oben in eine extra Seite von Excel.</li><li>In der ersten Spalte steht der Gruppenname, am besten als Textkürzel; in der zweiten die gemessenen Werten.</li><li>Spaltenüberschriften müssen vorhanden sein.</li><li>Nehmen Sie die Daten mit Spaltenüberschriften in die Zwischenablage (STRG-C)</li><li>Pasten Sie die Daten in das Feld oben rechts.</li></ul>")
+      HTML("<ul><li>Kopieren Sie die Spalten wie oben in eine extra Seite von Excel.</li><li>In der ersten Spalte steht der Gruppenname, am besten als Textkürzel; in der zweiten die gemessenen Werten.</li><li>Spaltenüberschriften müssen vorhanden sein.</li><li>Nehmen Sie die Daten mit Spaltenüberschriften in die Zwischenablage (Strg-C)</li><li>Pasten Sie die Daten in das Feld oben rechts (Strg-V).</li><li>Wenn nur eine Gruppe vorhanden ist, wird ein Test der Gruppe gegen Null ausgegeben. Wenn die Messwerte in diesem Fall paarweise Differenzen sind, können Sie so den gepaarten Wilcoxon Test berechnen.</li></ul>")
     ),
     mainPanel("Daten: Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben",
       aceEditor("data", "", mode = "plain_text"),
-      actionButton("clearButton","Löschen"),
+      actionButton("clearButton","Löschen", icon = icon("eraser")),
       wellPanel(id = "results",
         tags$script(type = "text/javascript",
           HTML("ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});")),
         plotOutput("diffplot"),
-        HTML("<ul><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde kein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.<li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>"),
+        HTML("<ul><li>Jeder Balken repräsentiert das 95%-Konfidenzintervale einer paarweisen Gruppendifferenz.</li><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde für keine Differenz ein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.<li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li><li>In der Tabelle unten ist 'estimate' die geschätzte Differenz für den Paarvergleich (difference in location): 'lower' und 'upper' sind die 95% Konfidenzgrenzen.</li><li>Falls Sie die Werte dieser Tabelle in Ihre Arbeit übernehmen, reduzieren Sie bitte die Anzahl Kommastellen einheitlich.</li></ul>"),
         DT::dataTableOutput('table'),
         plotOutput("boxplot"),
         HTML("<ul><li>Im Box-Whiskers-Plot werden Mediane, Quartile und Ausreißer (outliers) dargestellt. Siehe den Artikel in <a href='https://de.wikipedia.org/wiki/Boxplot'>Wikipedia</a>.</li><li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>")

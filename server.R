@@ -11,6 +11,7 @@ shinyServer(function(input, output, session) {
     data = input$data
     # Replace multiple spaces or tabs by single tab
     data = str_replace_all(data,"([\t ]+)","\t")
+    data = str_replace_all(data,",",".")
     if (nchar(data) < 10) return(NULL)
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
     if (nrow(d) < 3) return(NULL)
@@ -74,8 +75,33 @@ shinyServer(function(input, output, session) {
       geom_boxplot( )
   })
 
+  output$boxplot1 = renderPlot({
+    d = getData()
+    if (is.null(d) ) return(NULL)
+    ylim = quantile(d[,2],c(0.05,0.95))
+    ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) +
+      geom_boxplot( ) + scale_y_continuous(limits=ylim)
+  })
 
-  output$table = DT::renderDataTable({
+  output$histogram1 = renderPlot({
+    d = getData()
+    if (is.null(d) ) return(NULL)
+    ggplot(data = d, aes_string(x = names(d)[2])) +
+      geom_histogram( ) + facet_wrap(as.formula(paste("~",names(d)[1])))
+
+  })
+  output$density = renderPlot({
+    d = getData()
+    if (is.null(d) ) return(NULL)
+    #    ggplot(data = d, aes_string(x = names(d)[2])) +
+    #      geom_histogram( ) + facet_wrap(as.formula(paste("~",names(d)[1])))
+    #    ggplot(data=baseline,aes(x=Age,fill=Group))+
+    #      geom_density(alpha=0.3,adjust=1.5)+ylab("")
+    ggplot(data = d, aes_string(x = names(d)[2], fill = names(d)[1] )) +
+      geom_density(alpha = 0.3, adjust = 1.5 )
+  })
+
+    output$table = DT::renderDataTable({
     if (is.null(pc())| class(p) == "htest") return(NULL)
     as.data.frame(pc())},
       options = list(dom = 't'))

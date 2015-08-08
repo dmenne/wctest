@@ -21,7 +21,11 @@ shinyUI(fluidPage(
         HTML("<ul><li>Jeder Balken repräsentiert das 95%-Konfidenzintervale einer paarweisen Gruppendifferenz.</li><li>Wenn eine der Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde für keine Differenz ein signifikanter Effekt gefunden. Das heißt aber nicht, dass keine Unterschied vorhanden ist, er ist nur mit diesen Daten nicht nachweisbar.</li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.<li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li><li>In der Tabelle unten ist 'estimate' die geschätzte Differenz für den Paarvergleich (difference in location): 'lower' und 'upper' sind die 95% Konfidenzgrenzen.</li><li>Falls Sie die Werte dieser Tabelle in Ihre Arbeit übernehmen, reduzieren Sie bitte die Anzahl Kommastellen einheitlich.</li></ul>"),
         DT::dataTableOutput('table'),
         plotOutput("boxplot"),
-        HTML("<ul><li>Im Box-Whiskers-Plot werden Mediane, Quartile und Ausreißer (outliers) dargestellt. Siehe den Artikel in <a href='https://de.wikipedia.org/wiki/Boxplot'>Wikipedia</a>.</li><li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>")
+        HTML("<ul><li>Im unten stehende Diagramm ist die vertikale Achse gespreizt. Es kann sein, dass einige Ausreißer deshalb nicht sichtbar sind, aber der zentrale Bereich deutlicher dargestellt wird.</li></ul>"),
+        plotOutput("boxplot1"),
+        HTML("<ul><li>Im Box-Whiskers-Plot werden Mediane, Quartile und Ausreißer (outliers) dargestellt. Siehe den Artikel in <a href='https://de.wikipedia.org/wiki/Boxplot'>Wikipedia</a>.</li><li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li></ul>"),
+        plotOutput("histogram1"),
+        plotOutput("density")
       ) # wellPanel
     )
   )

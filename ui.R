@@ -15,6 +15,7 @@ shinyUI(fluidPage(
       aceEditor("data", "", mode = "plain_text"),
       actionButton("clearButton","Löschen", icon = icon("eraser")),
       actionButton("sampleButton","Beispiel", icon = icon("eyedropper")),
+      helpText("Bevor Sie Ihre eigenen Daten auswerten, erzeugen Sie bitte durch Klick auf die Schaltfläche 'Beispiel' simulierte Daten eines Experiments, und versuchen Sie, das Ergebnis zu interpretieren. Klicken Sie nochmal und interpretieren Sie das Experiment wieder. Mehrfaches Klicken simuliert, wie die Daten der gleichen (ja!!) Studie bei mehrfachen Wiederholungen herauskommen könnten. Vielleicht interpretieren Sie nach dieser Erfahrung Ihre Studienergebnisse etwas weniger dogmatisch."),
       wellPanel(id = "results",
         tags$script(type = "text/javascript",
           HTML("ace.edit('data').setOptions({tabSize:12,showInvisibles:true,useSoftTabs:false});")),

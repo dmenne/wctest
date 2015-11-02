@@ -63,10 +63,10 @@ shinyServer(function(input, output, session) {
     ngroups = 3
     npergroup = 15
     d = data.frame(Behandlung = rep(letters[1:ngroups], each = npergroup),
-           Wert = round(rt(npergroup*ngroups, df=2, ncp=
-                        rep(1:ngroups, each = npergroup)),2))
+           Wert = round(rt(npergroup*ngroups, df = 2,
+                           ncp = rep(1:ngroups, each = npergroup)),2))
     write.table(d, file = textConnection("d1","w"),
-                row.names = FALSE, sep = "\t", quote=FALSE)
+                row.names = FALSE, sep = "\t", quote = FALSE)
     d1 = paste(d1, collapse = "\n")
     updateAceEditor(session, "data",value = d1)
   })

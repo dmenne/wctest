@@ -52,10 +52,26 @@ shinyServer(function(input, output, session) {
       return(NULL)
     hide("results")
     hide("summary")
-    updateAceEditor(session, "data",value = "\n")
+    # Dirty trick to clear using an invalid value
+    updateAceEditor(session, "data",value = 1)
   })
 
-  output$helpImage = renderImage({
+  observe({
+    if (input$sampleButton == 0)
+      return(NULL)
+    # Create simulated data
+    ngroups = 3
+    npergroup = 15
+    d = data.frame(Behandlung = rep(letters[1:ngroups], each = npergroup),
+           Wert = round(rt(npergroup*ngroups, df=2, ncp=
+                        rep(1:ngroups, each = npergroup)),2))
+    write.table(d, file = textConnection("d1","w"),
+                row.names = FALSE, sep = "\t", quote=FALSE)
+    d1 = paste(d1, collapse = "\n")
+    updateAceEditor(session, "data",value = d1)
+  })
+
+    output$helpImage = renderImage({
     list(src = normalizePath("wctesthelp.png"), alt = "How to use")
   }, deleteFile = FALSE)
 

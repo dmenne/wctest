@@ -5,7 +5,7 @@ Allows for copy/paste of data from Excel. Creates plots of confidence intervals 
 
 You can create sample data to simulate multiple repeats of a study and observe the horribly different conclusions that could be drawn on multiple runs. 
 
-## Demonstration
+## Run it online
 
 https://menne-biomed.shinyapps.io/wctests
 

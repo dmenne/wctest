@@ -15,7 +15,14 @@ shinyServer(function(input, output, session) {
     if (nchar(data) < 10) return(NULL)
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
     if (nrow(d) < 3) return(NULL)
-    d[,1] = as.factor(d[,1])
+    # if there is only one column, add a group name
+    if (ncol(d) == 1) {
+      d = cbind(group = "A", d)
+      hide("results")
+    } else {
+      d[,1] = as.factor(d[,1])
+      show("results")
+    }
     d
   })
 
@@ -28,15 +35,18 @@ shinyServer(function(input, output, session) {
     if (length(t1) > 0 ) {
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
-    if (length(td) == 1){
-      p = wilcox.test(d[,2], exact = FALSE)
-      attr(p, "summary") = paste(nrow(d),
-            " Werte in nur einer Gruppe. p=",
-             signif(p$p.value,2)," im Test gegen 0.")
+    if (length(td) == 1) {
+      p = wilcox.test(d[,2], exact = FALSE, conf.int = TRUE)
+      attr(p, "summary") = paste0("<b>Einstichproben Wilcoxon-Test</b><br>",
+            nrow(d), " Werte in einer Gruppe. <br>p=",
+             signif(p$p.value,2)," im Test gegen 0.<br>Schätzwert: ",
+            signif(p$estimate,2), "<br>95% Konfidenzintervall: (",
+            signif(p$conf.int[1],2), "...",signif(p$conf.int[2],2),")"
+        )
     } else {
       p = pairwiseCI(form, d, method = "Param.diff")
-      attr(p, "summary") = paste(nrow(d), " gültige Werte in ", length(td)," Gruppen",
-                               paste(names(td), collapse = ", "))
+      attr(p, "summary") = paste(nrow(d), " gültige Werte in ",
+            length(td)," Gruppen", paste(names(td), collapse = ", "))
     }
     p
   })
@@ -47,6 +57,7 @@ shinyServer(function(input, output, session) {
     attr(pc(),"summary")
   }
   )
+
   observe({
     if (input$clearButton == 0)
       return(NULL)

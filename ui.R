@@ -9,7 +9,7 @@ shinyUI(fluidPage(
     sidebarPanel( "",
       htmlOutput("summary"),
       imageOutput("helpImage", height = "430px"),
-      HTML("<ul><li>Kopieren Sie die Spalten wie oben in eine extra Seite von Excel.</li><li>In der ersten Spalte steht der Gruppenname, am besten als Textkürzel; in der zweiten die gemessenen Werten.</li><li>Spaltenüberschriften müssen vorhanden sein.</li><li>Nehmen Sie die Daten mit Spaltenüberschriften in die Zwischenablage (Strg-C)</li><li>Pasten Sie die Daten in das Feld oben rechts (Strg-V).</li><li>Sie können auch nur eine Spalte <b>mit Spaltenüberschrift</b>  eingeben. Dann wird ein Einstichproben-Wilcoxon-Test ausgeführt, es wird also die Nullhypothese getestet, dass die Werte aus einer Stichprobe stammt, die nicht gegen Null verschoben ist.</li></ul>"),
+      HTML("<ul><li>Kopieren Sie die Spalten wie oben in eine extra Seite von Excel.</li><li>In der ersten Spalte steht der Gruppenname, am besten als Textkürzel; in der zweiten die gemessenen Werten.</li><li>Spaltenüberschriften müssen vorhanden sein.</li><li>Nehmen Sie die Daten mit Spaltenüberschriften in die Zwischenablage (Strg-C)</li><li>Pasten Sie die Daten in das Feld oben rechts (Strg-V).</li><li>Sie können auch nur eine Spalte <b>mit Spaltenüberschrift</b>  eingeben. Dann wird ein Einstichproben-Wilcoxon-Test ausgeführt, es wird also die Nullhypothese getestet, dass die Werte aus einer Stichprobe stammen, die nicht gegen Null verschoben sind.</li></ul>"),
     helpText(a("Source on github", href = "https://github.com/dmenne/wctest", target = "_blank"))
     ),
     mainPanel("Daten: Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben",

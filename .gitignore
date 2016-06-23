@@ -6,3 +6,5 @@ testapp
 a.txt
 spacesep.txt
 *.html
+.rstudio
+.cache

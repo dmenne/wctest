@@ -98,23 +98,31 @@ shinyServer(function(input, output, session) {
   output$boxplot = renderPlot({
     d = getData()
     if (is.null(d) ) return(NULL)
+    aspect.ratio = length(unique(d[[1]]))/1.5
     ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) +
-      geom_boxplot( )
+      geom_boxplot( ) +
+      theme(aspect.ratio = aspect.ratio)
   })
 
   output$boxplot1 = renderPlot({
     d = getData()
     if (is.null(d) ) return(NULL)
+    aspect.ratio = length(unique(d[[1]]))/1.5
     ylim = quantile(d[,2],c(0.05,0.95))
     ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) +
-      geom_boxplot( ) + scale_y_continuous(limits=ylim)
+      geom_boxplot( ) +
+      scale_y_continuous(limits=ylim) +
+      theme(aspect.ratio = aspect.ratio)
   })
 
   output$histogram1 = renderPlot({
     d = getData()
     if (is.null(d) ) return(NULL)
-    ggplot(data = d, aes_string(x = names(d)[2])) +
-      geom_histogram( ) + facet_wrap(as.formula(paste("~",names(d)[1])))
+    nam = names(d)[2]
+    bins = nclass.Sturges(unlist(d[nam]))
+    ggplot(data = d, aes_string(x = nam)) +
+      geom_histogram(bins = bins) +
+      facet_wrap(as.formula(paste("~",names(d)[1])))
 
   })
   output$density = renderPlot({

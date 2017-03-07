@@ -115,27 +115,6 @@ shinyServer(function(input, output, session) {
       theme(aspect.ratio = aspect.ratio)
   })
 
-  output$histogram1 = renderPlot({
-    d = getData()
-    if (is.null(d) ) return(NULL)
-    nam = names(d)[2]
-    bins = nclass.Sturges(unlist(d[nam]))
-    ggplot(data = d, aes_string(x = nam)) +
-      geom_histogram(bins = bins) +
-      facet_wrap(as.formula(paste("~",names(d)[1])))
-
-  })
-  output$density = renderPlot({
-    d = getData()
-    if (is.null(d) ) return(NULL)
-    #    ggplot(data = d, aes_string(x = names(d)[2])) +
-    #      geom_histogram( ) + facet_wrap(as.formula(paste("~",names(d)[1])))
-    #    ggplot(data=baseline,aes(x=Age,fill=Group))+
-    #      geom_density(alpha=0.3,adjust=1.5)+ylab("")
-    ggplot(data = d, aes_string(x = names(d)[2], fill = names(d)[1] )) +
-      geom_density(alpha = 0.3, adjust = 1.5 )
-  })
-
     output$table = DT::renderDataTable({
     if (is.null(pc())| class(p) == "htest") return(NULL)
     as.data.frame(pc())},

@@ -7,7 +7,7 @@ You can create sample data to simulate multiple repeats of a study and observe t
 
 ## Run it online
 
-https://menne-biomed.shinyapps.io/wctests
+https://apps.menne-biomed.de/wctest/
 
 ## Screenshot
 

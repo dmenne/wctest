@@ -115,9 +115,11 @@ shinyServer(function(input, output, session) {
       theme(aspect.ratio = aspect.ratio)
   })
 
-    output$table = DT::renderDataTable({
-    if (is.null(pc())| class(p) == "htest") return(NULL)
-    as.data.frame(pc())},
-      options = list(dom = 't'))
+  output$table = DT::renderDataTable({
+      if (is.null(pc())| class(p) == "htest") return(NULL)
+      p = as.data.frame(pc())
+      p[,1:3] = signif(p[,1:3],3)
+    },
+    options = list(dom = 't'))
 })
 

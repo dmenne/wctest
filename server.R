@@ -36,15 +36,24 @@ shinyServer(function(input, output, session) {
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
     if (length(td) == 1) {
-      p = wilcox.test(d[,2], exact = FALSE, conf.int = TRUE)
-      attr(p, "summary") = paste0("<b>Einstichproben Wilcoxon-Test</b><br>",
-            nrow(d), " Werte in einer Gruppe. <br>p=",
-             signif(p$p.value,2)," im Test gegen 0.<br>Schätzwert: ",
-            signif(p$estimate,2), "<br>95% Konfidenzintervall: (",
-            signif(p$conf.int[1],2), "...",signif(p$conf.int[2],2),")"
-        )
+      if (input$test_type =="Wilcoxon"){
+        p = wilcox.test(d[,2], exact = FALSE, conf.int = TRUE)
+        attr(p, "summary") = paste0("<b>Einstichproben Wilcoxon-Test</b><br>",
+              nrow(d), " Werte in einer Gruppe. <br>p=",
+               signif(p$p.value,2)," im Test gegen 0.<br>Schätzwert: ",
+              signif(p$estimate,2), "<br>95% Konfidenzintervall: (",
+              signif(p$conf.int[1],2), "...",signif(p$conf.int[2],2),")")
+      } else {
+        p = t.test(d[,2])
+        attr(p, "summary") = paste0("<b>Einstichproben t-Test</b><br>",
+                  nrow(d), " Werte in einer Gruppe. <br>p=",
+                  signif(p$p.value,2)," im Test gegen 0.<br>Schätzwert: ",
+                  signif(p$estimate,2), "<br>95% Konfidenzintervall: (",
+                  signif(p$conf.int[1],2), "...",signif(p$conf.int[2],2),")")
+      }
     } else {
-      p = pairwiseCI(form, d, method = "Param.diff")
+      method = ifelse(input$test_type == "Wilcoxon", "HL.diff", "Param.diff")
+      p = pairwiseCI(form, d, method = method)
       attr(p, "summary") = paste(nrow(d), " gültige Werte in ",
             length(td)," Gruppen", paste(names(td), collapse = ", "))
     }

@@ -73,7 +73,7 @@ shinyServer(function(input, output, session) {
     hide("results")
     hide("summary")
     # Dirty trick to clear using an invalid value
-    updateAceEditor(session, "data",value = 1)
+    updateAceEditor(session, "data",  1)
   })
 
   observe({
@@ -88,7 +88,7 @@ shinyServer(function(input, output, session) {
     write.table(d, file = textConnection("d1","w"),
                 row.names = FALSE, sep = "\t", quote = FALSE)
     d1 = paste(d1, collapse = "\n")
-    updateAceEditor(session, "data",value = d1)
+    updateAceEditor(session, "data", d1)
   })
 
     output$helpImage = renderImage({
@@ -124,11 +124,18 @@ shinyServer(function(input, output, session) {
       theme(aspect.ratio = aspect.ratio)
   })
 
-  output$table = DT::renderDataTable({
+
+  output$table = renderDT({
       if (is.null(pc())| class(p) == "htest") return(NULL)
       p = as.data.frame(pc())
-      p[,1:3] = signif(p[,1:3],3)
+      p = cbind(Vergleich =  p[,4], signif(p[,1:3],3))
     },
-    options = list(dom = 't'))
+    extensions = "Buttons",
+    rownames = FALSE,
+    options = list(paging = FALSE, searching = FALSE,
+                  autoWidth = TRUE,
+                  dom = 'Bfrtip',
+                  buttons = c('excel', 'copy', "csv"))
+  )
 })
 

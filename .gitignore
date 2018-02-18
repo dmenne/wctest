@@ -3,9 +3,8 @@
 .RData
 rsconnect
 testapp
-a.txt
-spacesep.txt
 *.html
 .rstudio
 .cache
 wctests.zip
+*.txt

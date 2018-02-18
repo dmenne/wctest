@@ -10,10 +10,12 @@ shinyServer(function(input, output, session) {
   getData = reactive({
     data = input$data
     # Replace multiple spaces or tabs by single tab
-    data = str_replace_all(data,"([\t ]+)","\t")
+    data = str_replace_all(data,"[ ]","")
+    data = str_replace_all(data,"([\t]+)","\t")
     data = str_replace_all(data,",",".")
     if (nchar(data) < 10) return(NULL)
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
+    d = droplevels(d)
     if (nrow(d) < 3) return(NULL)
     # if there is only one column, add a group name
     if (ncol(d) == 1) {
@@ -21,7 +23,7 @@ shinyServer(function(input, output, session) {
       hide("results")
     } else {
       d[,1] = as.factor(d[,1])
-      show("results")
+      if (nlevels(d[,1]) == 1) hide("results") else show("results")
     }
     d
   })
@@ -36,7 +38,7 @@ shinyServer(function(input, output, session) {
       stop("Nur ein Element in Gruppe '", names(td)[t1[1]],"'")
     }
     if (length(td) == 1) {
-      if (input$test_type =="Wilcoxon"){
+      if (input$test_type == "Wilcoxon") {
         p = wilcox.test(d[,2], exact = FALSE, conf.int = TRUE)
         attr(p, "summary") = paste0("<b>Einstichproben Wilcoxon-Test</b><br>",
               nrow(d), " Werte in einer Gruppe. <br>p=",

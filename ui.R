@@ -23,6 +23,7 @@ shinyUI(fluidPage(
     # end sidebarpanel
     mainPanel(
       "Excel-Daten mit 1, 2 oder 3 Spalten in der Zwischenablage mit STRG-V hier eingeben",
+      "Daten: Zweispaltige Excel-Daten aus der Zwischenablage mit STRG-V hier eingeben",
       aceEditor("data", "", mode = "plain_text"),
       actionButton("clearButton", "Löschen", icon = icon("eraser")),
       actionButton("sampleButton", "Beispiel", icon = icon("eyedropper")),

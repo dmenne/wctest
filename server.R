@@ -17,6 +17,7 @@ shinyServer(function(input, output, session) {
     d = na.omit(read.table(textConnection(data), sep = "\t", header = TRUE))
     d = droplevels(d)
     if (nrow(d) < 3) return(NULL)
+    attr(d,"par") = ""
     # if there is only one column, add a group name
     if (ncol(d) == 1) {
       d = cbind(group = "A", d)
@@ -24,6 +25,12 @@ shinyServer(function(input, output, session) {
     } else {
       d[,1] = as.factor(d[,1])
       if (nlevels(d[,1]) == 1) hide("results") else show("results")
+    }
+    if (ncol(d) == 3) {
+      d[,2]  = d[,3] - d[,2]
+      attr(d,"par") = paste(names(d)[3], names(d)[2], sep = " - ")
+      names(d)[2] = paste("diff", names(d)[3], names(d)[2], sep = "_")
+      d[,3] = NULL
     }
     d
   })
@@ -59,6 +66,7 @@ shinyServer(function(input, output, session) {
       attr(p, "summary") = paste(nrow(d), " gültige Werte in ",
             length(td)," Gruppen", paste(names(td), collapse = ", "))
     }
+    attr(p,"par") = attr(d,"par")
     p
   })
 
@@ -85,7 +93,7 @@ shinyServer(function(input, output, session) {
     ngroups = 3
     npergroup = 15
     d = data.frame(Behandlung = rep(letters[1:ngroups], each = npergroup),
-           Wert = round(rt(npergroup*ngroups, df = 2,
+           Wert = 0.5 + round(rt(npergroup*ngroups, df = 2,
                            ncp = rep(1:ngroups, each = npergroup)),2))
     write.table(d, file = textConnection("d1","w"),
                 row.names = FALSE, sep = "\t", quote = FALSE)
@@ -93,7 +101,23 @@ shinyServer(function(input, output, session) {
     updateAceEditor(session, "data", d1)
   })
 
-    output$helpImage = renderImage({
+  observe({
+    if (input$sampleDiffButton == 0)
+      return(NULL)
+    # Create simulated data
+    ngroups = 3
+    npergroup = 15
+    d = data.frame(Behandlung = rep(letters[1:ngroups], each = npergroup),
+                   Vorher = round(rt(npergroup*ngroups, df = 3,
+                                   ncp = rep(1:ngroups, each = npergroup)),2))
+    d$Nachher = round(d$Vorher + rlnorm(nrow(d),0,1),2) + 0.5 * as.integer(d$Behandlung)
+    write.table(d, file = textConnection("d1","w"),
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    d1 = paste(d1, collapse = "\n")
+    updateAceEditor(session, "data", d1)
+  })
+
+  output$helpImage = renderImage({
     list(src = normalizePath("wctesthelp.png"), alt = "How to use")
   }, deleteFile = FALSE)
 
@@ -102,8 +126,8 @@ shinyServer(function(input, output, session) {
     if (is.null(p) | class(p) == "htest") return(NULL)
     ylim = c(0, length(p$byout[[1]][[1]]) + 1)
     show("results")
-
-    plotCI(p, main = "95% Konfidenzintervalle", HL = TRUE, lines = 0, ylim = ylim)
+    main = paste("95% Konfidenzintervalle", attr(p,"par") )
+    plotCI(p, main = main, HL = TRUE, lines = 0, ylim = ylim)
   })
 
   output$boxplot = renderPlot({

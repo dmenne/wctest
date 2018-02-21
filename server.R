@@ -2,6 +2,7 @@ library(pairwiseCI)
 library(DT)
 library(stringr)
 library(ggplot2)
+library(dplyr)
 
 shinyServer(function(input, output, session) {
   hide("results")
@@ -146,13 +147,32 @@ shinyServer(function(input, output, session) {
     ylim = quantile(d[,2],c(0.05,0.95))
     ggplot(d, aes_string(x = names(d)[1], y = names(d)[2])) +
       geom_boxplot( ) +
-      scale_y_continuous(limits=ylim) +
+      scale_y_continuous(limits = ylim) +
       theme(aspect.ratio = aspect.ratio)
   })
 
+  output$box_table = renderDT({
+    d = getData()
+    g = names(d)[1]
+    q25 = function(x) signif(quantile(x, 0.25),2)
+    q75 = function(x) signif(quantile(x, 0.75),2)
+    med = function(x) signif(median(x),2)
+    d %>% group_by_(g) %>%
+      summarize_all(
+        .funs = c(med = med, q25 = q25, q75 = q75)
+      )
+  },
+  extensions = "Buttons",
+  rownames = FALSE,
+  options = list(paging = FALSE, searching = FALSE,
+                   autoWidth = TRUE,
+                   dom = 'Bfrtip',
+                   buttons = c('excel', 'copy', "csv"))
+  )
+
 
   output$table = renderDT({
-      if (is.null(pc())| class(p) == "htest") return(NULL)
+      if (is.null(pc()) ) return(NULL)
       p = as.data.frame(pc())
       p = cbind(Vergleich =  p[,4], signif(p[,1:3],3))
     },

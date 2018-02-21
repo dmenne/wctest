@@ -50,6 +50,10 @@ shinyUI(fluidPage(
         ),
         hr(),
         plotOutput("boxplot"),
+        hr(),
+        DTOutput("box_table"),
+        HTML("Median und Quartile, die in den Boxplots dargestellt werden."),
+        hr(),
         HTML(
           "<ul><li>Im unten stehende Diagramm ist die vertikale Achse gespreizt. Es kann sein, dass einige Ausreißer deshalb nicht sichtbar sind, aber der zentrale Bereich deutlicher dargestellt wird. Falls Sie diese Darstellung verwenden, bitte fügen Sie in der Bildunterschrift hinzu:'xx Punkte liegen oberhalb des dargestellten Bereichs.'</li></ul>"
         ),

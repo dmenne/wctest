@@ -153,6 +153,7 @@ shinyServer(function(input, output, session) {
 
   output$box_table = renderDT({
     d = getData()
+    if (is.null(d)) return(NULL)
     g = names(d)[1]
     q25 = function(x) signif(quantile(x, 0.25),2)
     q75 = function(x) signif(quantile(x, 0.75),2)

@@ -5,6 +5,7 @@ library(DT)
 shinyUI(fluidPage(
   useShinyjs(),
   tags$style(HTML("ul{margin-left:-30px}")),
+  tags$style(HTML("hr{border-color: #e4e4e4 #a4a4a4;border-width: 6px;margin-top:1em;margin-bottom:0.5em;}")),
   titlePanel("Vertrauensintervall zwischen Gruppen: Wilcoxon und t-Test"),
   sidebarLayout(
     sidebarPanel(
@@ -44,7 +45,7 @@ shinyUI(fluidPage(
           '<ul><li>Jeder Balken repräsentiert das 95%-Konfidenzintervall einer Gruppendifferenz.</li><li>Wenn ein Konfidenzbalken den Wert 0 NICHT kreuzt, ist diese Differenz signifikant von Null verschieden mit p<0.05.</li><li>Wenn ein Balken den Wert 0  kreuzt, dann ist die Differenz für dieses Paar signifkant von Null verschieden. Schreiben Sie bitte nicht: "Beide Behandlungsmethoden haben die gleiche Wirkung auf ...", sondern etwa: "Mit den Daten konnte ein Unterschied zwischen den beiden Behandlungsmethoden nicht nachgewiesen werden"; in Gedanken: ein Unterschied könnnte aber duchaus bestehen.</li><li>Wenn alle Balken den Wert 0 kreuzen, wurde für keine Paarung ein signifikanter Unterschied gefunden. </li><li>p-Werte werden hier bewusst nicht ausgegeben, da die Konfidenzintervalle aussagekräftiger sind.</li><li>Eine Korrektur für multiples Testen - Stichwort: Bonferroni - wurde nicht durchgeführt.<li>Um die Graphik zu speichern, verwenden Sie im Browser das Menü, das nach Rechtsklick erscheint.</li><li>In der Tabelle unten ist "estimate" die geschätzte Differenz für den Paarvergleich; "lower" und "upper" sind die 95% Konfidenzgrenzen. Für den Wilcoxon-Test ist es die "difference in location", bestimmt mit dem <a href="https://en.wikipedia.org/wiki/Hodges%E2%80%93Lehmann_estimator">Hodges-Lehman Schätzer</a>; näherungsweise ist dies die Differenz der Mediane. Für den t-Test ist es die Differenz der Mittelwerte und deren Konfidenzintervall, unter der Annahme ungleicher Varianzen.</li></ul>'
         ),
         DTOutput('table'),
-        HTML("Zum Einfügen in Word: Copy klicken, dann STRG-V in Word. Dort den Tabellenteil ohne Titel anwählen, dann Einfügen/Tabelle/Text zu Tabelle."),
+        HTML("<i>Zum Einfügen in Word: Copy klicken, dann STRG-V in Word. Dort den Tabellenteil ohne Titel anwählen, dann Einfügen/Tabelle/Text in Tabelle umwandeln. Formatvorlagen für Tabelle verwenden. Gute Typographie verwendet wenige vertikale und horizontale Linien, schauen Sie in Büchern oder Publikationen nach, wie eine saubere Tabelle gesetzt wird. </i>"),
         h4("Beispiele für die Formulierung"),
         HTML(
           'Angenommen, in der ersten Zeile steht <code>b-a  2.3 1.0 4.5</code> für Muskelkraftwerte in kg. Dann könnte der Text lauten: "<i>Bei der Gruppe mit Behandlung b ist die Muskelkraft im Mittel um 2.3 kg höher als bei Behandlung a, bei einem 95% Konfidenzintervall KI von 1.0 bis 4.5 kg. Der Unterschied ist signifikant auf dem 5% Niveau.</i>" Warum: weil der Bereich nicht mit 0 überlappt. Beim zweiten Mal können Sie die Kurzform "<i>KI(1.0 bis 4.5) kg</i>" verwenden und das Niveau weglassen;  alternativ die englische Form <it>CI</it>.<br>Steht dort: <code>b-a  0.22 -1.15 1.57</code>, dann schreiben Sie: "<i>Bei der Behandlung (mit) b ist die Muskelkraft im Mittel um 0.22 kg höher als bei Behandlung (mit) a, KI(-1.15 bis 1.57) kg; der Unterschied ist nicht signifikant.</i>" Warum: weil der Bereich mit Null überlappt.'

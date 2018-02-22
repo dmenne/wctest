@@ -18,7 +18,7 @@ shinyUI(fluidPage(
       helpText(
         a("Source on github", href = "https://github.com/dmenne/wctest", target = "_blank")
       ),
-      helpText("Version 2018_02_18_01")
+      helpText("Version 2018_02_22_01")
     ),
     # end sidebarpanel
     mainPanel(

@@ -151,6 +151,8 @@ shinyServer(function(input, output, session) {
       theme(aspect.ratio = aspect.ratio)
   })
 
+  ci_pair = "Mediane und Quartile der Gruppen"
+
   output$box_table = renderDT({
     d = getData()
     if (is.null(d)) return(NULL)
@@ -166,9 +168,15 @@ shinyServer(function(input, output, session) {
   extensions = "Buttons",
   rownames = FALSE,
   options = list(paging = FALSE, searching = FALSE,
+                   ordering = FALSE, info = FALSE,
                    autoWidth = TRUE,
+                   #columnDefs = list(list(width = '20px', targets = "_all")),
                    dom = 'Bfrtip',
-                   buttons = c('excel', 'copy', "csv"))
+                   buttons = list(
+                     list(extend = 'excel', title = ci_pair),
+                     list(extend = 'copy', title = ci_pair ),
+                     list(extend = 'csv', title = ci_pair ))
+                 )
   )
 
 
@@ -180,9 +188,11 @@ shinyServer(function(input, output, session) {
     extensions = "Buttons",
     rownames = FALSE,
     options = list(paging = FALSE, searching = FALSE,
-                  autoWidth = TRUE,
-                  dom = 'Bfrtip',
-                  buttons = c('excel', 'copy', "csv"))
+                   ordering = FALSE, info = FALSE,
+                   autoWidth = TRUE,
+                   dom = 'Bfrtip',
+                   buttons = c('excel', 'copy', "csv"))
+
   )
 })
 

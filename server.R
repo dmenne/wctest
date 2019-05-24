@@ -4,6 +4,7 @@ library(stringr)
 library(ggplot2)
 library(dplyr)
 
+
 shinyServer(function(input, output, session) {
   hide("results")
   theme_set(theme_bw())
@@ -25,7 +26,7 @@ shinyServer(function(input, output, session) {
       hide("results")
     } else {
       d[,1] = as.factor(d[,1])
-      if (nlevels(d[,1]) == 1) hide("results") else show("results")
+      if (nlevels(d[,1]) == 1) hide("results") else showElement("results")
     }
     if (ncol(d) == 3) {
       d[,2]  = d[,3] - d[,2]
@@ -73,7 +74,7 @@ shinyServer(function(input, output, session) {
 
   output$summary = renderText({
     if (is.null(pc())) return(NULL)
-    show("summary")
+    showElement("summary")
     attr(pc(),"summary")
   }
   )
@@ -126,7 +127,7 @@ shinyServer(function(input, output, session) {
     p = pc()
     if (is.null(p) | class(p) == "htest") return(NULL)
     ylim = c(0, length(p$byout[[1]][[1]]) + 1)
-    show("results")
+    showElement("results")
     main = paste("95% Konfidenzintervalle", attr(p,"par") )
     plotCI(p, main = main, HL = TRUE, lines = 0, ylim = ylim)
   })
@@ -160,7 +161,7 @@ shinyServer(function(input, output, session) {
     q25 = function(x) signif(quantile(x, 0.25),2)
     q75 = function(x) signif(quantile(x, 0.75),2)
     med = function(x) signif(median(x),2)
-    d %>% group_by_(g) %>%
+    d %>% group_by_at(g) %>%
       summarize_all(
         .funs = c(med = med, q25 = q25, q75 = q75)
       )

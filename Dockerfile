@@ -16,6 +16,8 @@ libssh2-1-dev
 RUN R -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('DT', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('pairwiseCI', repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages('shinyAce', repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages('shinyjs', repos='http://cran.rstudio.com/')"
 
 
 # Copy configuration files into the Docker image

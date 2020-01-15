@@ -18,19 +18,14 @@ RUN R -e "install.packages('DT', repos='http://cran.rstudio.com/')"
 RUN R -e "install.packages('pairwiseCI', repos='http://cran.rstudio.com/')"
 
 
-# copy the app to the image
-COPY wctest.Rproj /srv/shiny-server/
-COPY server.R /srv/shiny-server/
-COPY ui.R /srv/shiny-server/
-COPY screenshot.png /srv/shiny-server/
-COPY wctesthelp.R /srv/shiny-server/
+# Copy configuration files into the Docker image
+COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
+COPY /app /srv/shiny-server/
 
-
-# select port
+# Make the ShinyApp available at port 80
 EXPOSE 3838
 
-# allow permission
-RUN sudo chown -R shiny:shiny /srv/shiny-server
+# Copy further configuration files into the Docker image
+COPY shiny-server.sh /usr/bin/shiny-server.sh
 
-# run app
 CMD ["/usr/bin/shiny-server.sh"]

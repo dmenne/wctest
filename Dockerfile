@@ -27,7 +27,7 @@ COPY /app /srv/shiny-server/
 # Make the ShinyApp available at port 3838
 EXPOSE 3838
 
-HEALTHCHECK -interval=3600 CMD curl --fail http://localhost:3838|| exit 1
+HEALTHCHECK --interval=3600 CMD curl --fail http://localhost:3838 || exit 1
 
 # Copy further configuration files into the Docker image
 COPY shiny-server.sh /usr/bin/shiny-server.sh

@@ -8,6 +8,7 @@ libcurl4-gnutls-dev \
 libcairo2-dev \
 libxt-dev \
 libssl-dev \
+curl\
 libssh2-1-dev
 
 
@@ -27,7 +28,7 @@ COPY /app /srv/shiny-server/
 # Make the ShinyApp available at port 3838
 EXPOSE 3838
 
-HEALTHCHECK CMD curl --fail http://localhost:3838 || exit 1
+HEALTHCHECK --interval=600s CMD curl --fail http://localhost:3838 || exit 1
 
 # Copy further configuration files into the Docker image
 COPY shiny-server.sh /usr/bin/shiny-server.sh

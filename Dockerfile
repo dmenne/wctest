@@ -8,8 +8,9 @@ libcurl4-gnutls-dev \
 libcairo2-dev \
 libxt-dev \
 libssl-dev \
-curl\
-libssh2-1-dev
+libssh-4 \
+libssh2-1-dev \
+curl
 
 
 # install R packages required

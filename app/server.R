@@ -112,7 +112,8 @@ shinyServer(function(input, output, session) {
     d = data.frame(Behandlung = rep(letters[1:ngroups], each = npergroup),
                    Vorher = round(rt(npergroup*ngroups, df = 3,
                                    ncp = rep(1:ngroups, each = npergroup)),2))
-    d$Nachher = round(d$Vorher + rlnorm(nrow(d),0,1),2) + 0.5 * as.integer(d$Behandlung)
+    d$Nachher = round(d$Vorher + rlnorm(nrow(d),0,1),2) + 0.5 *
+      as.integer(as.factor(d$Behandlung))
     write.table(d, file = textConnection("d1","w"),
                 row.names = FALSE, sep = "\t", quote = FALSE)
     d1 = paste(d1, collapse = "\n")

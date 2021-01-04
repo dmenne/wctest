@@ -4,7 +4,7 @@ LABEL maintainer="dieter.menne@menne-biomed.de"
 
 # system libraries of general use
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  libv8-dev
+  libv8-dev curl
 
 RUN install2.r --error --deps TRUE \
   DT \
@@ -17,7 +17,7 @@ COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY /app /srv/shiny-server/
 
 # Make the ShinyApp available at port 3838
-EXPOSE 3838
+# EXPOSE 3838 #already in stanverse
 
 HEALTHCHECK --interval=60s CMD curl --fail http://localhost:3838 || exit 1
 
